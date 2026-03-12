@@ -1,0 +1,12 @@
+use_bpm 60
+
+live_loop :a do
+    use_bpm 120
+    play :c4
+    sleep 1
+end
+
+live_loop :b do
+    play :e4
+    sleep 1
+end 
