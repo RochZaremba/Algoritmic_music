@@ -1,0 +1,23 @@
+#wykowywanie naprzemienne poprzez dodanie sleep 
+live_loop :foo do
+    sleep 1
+    play :c4
+    sleep 1
+end
+
+live_loop :bar do
+    play :e4
+    sleep 2
+end 
+
+#wykowywanie naprzemienne poprzez dodanie delay
+
+live_loop :foo, delay: 1 do
+    play :c4
+    sleep 2
+end
+
+live_loop :bar do
+    play :e4
+    sleep 2 
+end
