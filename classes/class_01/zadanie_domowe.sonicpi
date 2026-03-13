@@ -1,5 +1,25 @@
-use_bpm 100
+use_bpm 125 
 
-live_loop :bas do
-    play :c2 ,release:0.4
-    play :c2 ,amp: 0.4 , release: 0.2 
+live_loop :gruby_bas do
+    use_synth :tb303
+	play :c2, amp: 1.5, release: 0.2
+	sleep 0.5
+	play :c3, amp: 0.8, release: 0.1
+	sleep 0.5
+	play :c1, amp: 1.5, release: 0.2
+	sleep 0.75
+    play :c2, amp: 1.2, release: 0.2
+    sleep 0.25
+end
+
+live_loop :lead do
+    use_synth :supersaw
+    sleep 2 
+    play :c5, amp: 0.8, release: 0.2
+    sleep 0.25
+    play :c6, amp: 0.6, release:0.1
+    sleep 0.25
+    play :c4,release:0.5
+    sleep 1.5 
+
+end
