@@ -1,0 +1,5 @@
+use_bpm 100
+
+live_loop :bas do
+    play :c2 ,release:0.4
+    play :c2 ,amp: 0.4 , release: 0.2 
