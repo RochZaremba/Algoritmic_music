@@ -23,3 +23,11 @@ live_loop :lead do
     sleep 1.5 
 
 end
+
+live_loop :drums do
+    sample :bd_haus
+    sleep 1
+    sample :bd_haus
+    sample :sn_clap
+    sleep 1
+end
