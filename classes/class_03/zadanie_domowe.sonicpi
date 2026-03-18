@@ -1,10 +1,17 @@
 use_bpm 118
 
-steps = 0
+bar_count = 0
+bassline = (ring :e2, :e2, :g2, :b1, :a1, :a1, :c2, :d2)
+chords = (ring chord(:e3, :minor7), chord(:g3, :major7), chord(:a3, :minor7), chord(:d3, :sus4))
 
 live_loop :clock do
+  cue :intro if bar_count == 0
+  cue :middle if bar_count == 4
+  cue :outro if bar_count == 8
   cue :bar
+  bar_count += 1
   sleep 4
+  stop if bar_count == 10
 end
 
 live_loop :drums do
@@ -19,8 +26,37 @@ live_loop :drums do
     sleep 0.5
     sample :elec_tick, amp: 0.4
     sleep 0.5
-    steps += 1
   end
 
-  stop if steps >= 8
+  stop if bar_count > 9
+end
+
+live_loop :bass do
+  sync :bar
+
+  with_synth :fm do
+    4.times do
+      play bassline.tick(:bass),
+        attack: 0.02, decay: 0.15, sustain: 0.2, release: 0.35,
+        divisor: 2, depth: 1.5, amp: 1.1
+      sleep 1
+    end
+  end
+
+  stop if bar_count > 9
+end
+
+live_loop :chords do
+  sync :bar
+
+  with_synth :prophet do
+    play_chord chords.tick(:chords),
+      attack: 0.2, decay: 0.4, sustain: 2.5, release: 0.8,
+      cutoff: (ring 80, 95, 90, 100).tick(:cut),
+      res: 0.7,
+      amp: 0.7
+  end
+
+  sleep 4
+  stop if bar_count > 9
 end
