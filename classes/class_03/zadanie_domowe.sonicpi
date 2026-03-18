@@ -3,6 +3,8 @@ use_bpm 118
 bar_count = 0
 bassline = (ring :e2, :e2, :g2, :b1, :a1, :a1, :c2, :d2)
 chords = (ring chord(:e3, :minor7), chord(:g3, :major7), chord(:a3, :minor7), chord(:d3, :sus4))
+melody = (ring :e4, :g4, :b4, :d5, :b4, :g4, :fs4, :e4)
+lead_rhythm = (ring 0.5, 0.25, 0.75, 0.5, 0.5, 0.25, 0.25, 1.0)
 
 live_loop :clock do
   cue :intro if bar_count == 0
@@ -16,6 +18,15 @@ end
 
 live_loop :drums do
   sync :bar
+
+  in_thread(name: :shuffle_hat) do
+    8.times do
+      sample :drum_cymbal_closed, amp: 0.45, finish: 0.1, rate: 1.5
+      sleep 0.25
+      sample :drum_cymbal_pedal, amp: 0.25 if spread(3, 8).tick(:hat)
+      sleep 0.25
+    end
+  end
 
   4.times do
     sample :bd_haus, amp: 1.8
@@ -59,4 +70,35 @@ live_loop :chords do
 
   sleep 4
   stop if bar_count > 9
+end
+
+live_loop :lead do
+  sync :middle
+
+  with_synth :blade do
+    4.times do
+      8.times do
+        play melody.tick(:lead),
+          attack: 0.01, decay: 0.1, sustain: 0.15, release: 0.25,
+          cutoff: (ring 85, 95, 105, 100).tick(:lead_cut),
+          vibrato_depth: 0.18,
+          vibrato_rate: 5,
+          amp: 0.85
+        sleep lead_rhythm.tick(:lead_rhythm)
+      end
+    end
+  end
+end
+
+in_thread(name: :transitions) do
+  sync :intro
+  sample :ambi_glass_rub, amp: 0.5, rate: 0.7
+
+  sync :middle
+  sample :elec_filt_snare, amp: 1.1
+
+  sync :outro
+  with_fx :reverb, room: 0.9, mix: 0.5 do
+    sample :ambi_lunar_land, amp: 0.6, rate: 0.5
+  end
 end
