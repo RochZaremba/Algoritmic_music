@@ -1,0 +1,28 @@
+# Zajecia 3.1
+# Kontrola tempa przy uzyciu use_bpm i with_bpm.
+
+use_bpm 120
+4.times do
+  play :c4, release: 0.2
+  sleep 1
+end
+
+use_bpm 60
+4.times do
+  play :e4, release: 0.3
+  sleep 1
+end
+
+with_bpm 140 do
+  8.times do
+    play (ring :g4, :b4).tick(:fast), release: 0.15
+    sleep 0.5
+  end
+end
+
+with_bpm 80 do
+  4.times do
+    play chord(:c4, :major).tick(:slow), release: 0.4
+    sleep 1
+  end
+end
