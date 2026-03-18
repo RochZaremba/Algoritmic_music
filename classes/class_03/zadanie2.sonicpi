@@ -1,0 +1,28 @@
+# Zajecia 3.2
+# Dwa niezalezne watki: jeden przez live_loop, drugi przez in_thread.
+
+use_bpm 100
+
+live_loop :pulse do
+  sample :bd_haus, amp: 1.5
+  sleep 1
+end
+
+in_thread(name: :melody) do
+  with_synth :pluck do
+    8.times do
+      play (ring :e4, :g4, :b4, :d5).tick,
+        release: 0.2,
+        amp: 0.8
+      sleep 0.5
+    end
+  end
+end
+
+in_thread(name: :accent) do
+  4.times do
+    sleep 0.5
+    sample :elec_blip, amp: 0.6
+    sleep 1.5
+  end
+end
