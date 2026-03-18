@@ -1,0 +1,44 @@
+# Zajecia 3.3
+# Sterowanie petlami przez cue i sync.
+
+use_bpm 110
+
+live_loop :conductor do
+  cue :start_bar
+  sleep 4
+end
+
+live_loop :drums do
+  sync :start_bar
+
+  4.times do
+    sample :bd_haus, amp: 1.6
+    sleep 1
+  end
+end
+
+live_loop :chords do
+  sync :start_bar
+
+  with_synth :prophet do
+    play_chord chord(:e3, :minor7),
+      attack: 0.1, sustain: 2.5, release: 0.6,
+      cutoff: 90, amp: 0.8
+  end
+
+  sleep 4
+end
+
+live_loop :lead do
+  sync :chords
+
+  with_synth :blade do
+    4.times do
+      play (ring :e4, :g4, :b4, :a4).tick(:lead),
+        release: 0.2,
+        cutoff: 100,
+        amp: 0.7
+      sleep 0.5
+    end
+  end
+end
