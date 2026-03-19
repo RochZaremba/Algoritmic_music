@@ -1,0 +1,24 @@
+use_bpm 90
+use_random_seed 4001
+
+poczatkowy = rrand_i(40, 72)
+
+2.times do |i|
+  in_thread(name: "walker_#{i}".to_sym) do
+    dzwiek = poczatkowy
+
+    32.times do
+      dzwiek += rrand_i(-12, 12)
+
+      if dzwiek < note(:c2) or dzwiek > note(:c6)
+        dzwiek = poczatkowy
+      end
+
+      play dzwiek,
+        release: 0.8,
+        amp: 0.5,
+        pan: i == 0 ? -0.3 : 0.3
+      sleep 1
+    end
+  end
+end
