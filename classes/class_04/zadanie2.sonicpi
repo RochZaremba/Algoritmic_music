@@ -1,0 +1,26 @@
+use_bpm 60
+use_random_seed 4002
+
+akord = []
+
+30.times do
+  dzwiek_hz = rrand(200, 400)
+  akord.push(hz_to_midi(dzwiek_hz))
+end
+
+cel = (ring :d1, :d2, :a2, :d3, :a3, :d4, :a4, :d5, :a5, :d6, :fs6)
+
+with_synth :hollow do
+  dron = play akord,
+    sustain: 32,
+    release: 4,
+    amp: 0,
+    amp_slide: 16,
+    note_slide: 16
+
+  control dron, amp: 1
+  sleep 8
+
+  control dron, notes: cel, amp: 1
+  sleep 24
+end
