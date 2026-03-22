@@ -1,0 +1,25 @@
+use_bpm 100
+use_random_seed 4003
+
+frazy = [
+  (ring :c4),
+  (ring :e4, :g4),
+  (ring :g4, :a4, :g4),
+  (ring :c5, :g4, :e4),
+  (ring :d4, :e4, :g4, :e4)
+]
+
+2.times do |i|
+  in_thread(name: "in_c_#{i}".to_sym) do
+    use_synth i == 0 ? :beep : :pulse
+
+    frazy.each do |fraza|
+      rand_i(6).times do
+        fraza.each do |dzwiek|
+          play dzwiek, release: 0.2, amp: 0.5
+          sleep 0.5
+        end
+      end
+    end
+  end
+end
