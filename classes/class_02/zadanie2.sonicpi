@@ -1,0 +1,46 @@
+# Zajecia 2.2
+# Prezentacja wybranych interwalow w czterech sposobach:
+# - rownoczesnie
+# - naprzemiennie wolno
+# - naprzemiennie szybko
+# - naprzemiennie z przyspieszaniem i zwalnianiem
+
+use_bpm 60
+use_synth :piano
+
+intervals = [
+  [:c4, :cs4], # sekunda mala
+  [:c4, :fs4], # tryton
+  [:c4, :g4]   # kwinta czysta
+]
+
+tempo_curve = (ring 0.75, 0.6, 0.45, 0.3, 0.2, 0.3, 0.45, 0.6, 0.75)
+
+intervals.each do |first, second|
+  play first, sustain: 1.2, release: 0.3, amp: 1.2
+  play second, sustain: 1.2, release: 0.3, amp: 1.2
+  sleep 2
+
+  2.times do
+    play first, release: 0.2
+    sleep 1
+    play second, release: 0.2
+    sleep 1
+  end
+
+  4.times do
+    play first, release: 0.1
+    sleep 0.25
+    play second, release: 0.1
+    sleep 0.25
+  end
+
+  tempo_curve.each do |pause|
+    play first, release: 0.12, amp: 0.9
+    sleep pause
+    play second, release: 0.12, amp: 0.9
+    sleep pause
+  end
+
+  sleep 1
+end
