@@ -1,0 +1,71 @@
+# Zadanie domowe 2
+# Krotki utwor ~30 s z ADSR i manipulacja barwa dzwieku.
+
+use_bpm 100
+use_random_seed 2025
+
+chords = ring(
+  chord(:e3, :m9),
+  chord(:c3, :maj9),
+  chord(:g2, :sus4),
+  chord(:d3, :m9)
+)
+
+bass_notes = (ring :e2, :e2, :c2, :c2, :g1, :g1, :d2, :d2)
+
+melody = ring(
+  :e4, :g4, :b4, :fs4, :e4, :d4, :g4, :a4,
+  :g4, :e4, :d4, :b3, :d4, :fs4, :a4, :g4
+)
+
+rhythm = (ring 0.25, 0.25, 0.5, 0.75, 0.25, 0.5, 0.25, 1.25)
+
+pad_cutoff = (ring 70, 80, 90, 100, 110, 100, 90, 80, 75, 85, 95, 105)
+lead_cutoff = (ring 80, 90, 100, 110, 120, 110, 100, 90)
+
+in_thread(name: :pads) do
+  12.times do |i|
+    with_synth :prophet do
+      play_chord chords[i % 4],
+        attack: 0.3, decay: 0.6, sustain: 2.2, release: 0.9,
+        cutoff: pad_cutoff[i], res: 0.7, amp: 0.7
+    end
+    sleep 4
+  end
+end
+
+in_thread(name: :bass) do
+  with_synth :dsaw do
+    48.times do |i|
+      play bass_notes[i % 8],
+        attack: 0.01, decay: 0.15, sustain: 0.2, release: 0.25,
+        detune: (ring 0.1, 0.2, 0.35, 0.15).tick(:det),
+        cutoff: (ring 65, 75, 85, 95, 85, 75).tick(:cut),
+        amp: 0.9
+      sleep 1
+    end
+  end
+end
+
+in_thread(name: :drums) do
+  24.times do
+    sample :bd_haus, amp: 1.6
+    sleep 1
+    sample :elec_snare, amp: 0.8
+    sleep 1
+  end
+end
+
+with_synth :blade do
+  12.times do
+    8.times do
+      play melody.tick(:mel),
+        attack: 0.01, decay: 0.12, sustain: 0.08, release: 0.2,
+        cutoff: lead_cutoff.tick(:lcut),
+        vibrato_rate: 6,
+        vibrato_depth: 0.15,
+        amp: 0.8
+      sleep rhythm.tick(:ryt)
+    end
+  end
+end
