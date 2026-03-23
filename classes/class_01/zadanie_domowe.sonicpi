@@ -1,7 +1,7 @@
 use_bpm 128
 licznik_bas = 0
 licznik_lead = 0
-licznik_drums = 0
+licznik_bebny = 0
 
 live_loop :bas do
     if licznik_bas == 34 then stop end
@@ -48,13 +48,23 @@ live_loop :lead do
     end
 end
 
-live_loop :drums do
-    if licznik_drums == 34 then stop end
-    licznik_drums += 1
+live_loop :bebny do
+    if licznik_bebny == 68 then stop end
+    licznik_bebny += 1
 
-    sample :bd_haus
-    sleep 1
-    sample :bd_haus
-    sample :sn_clap
-    sleep 1
+    if licznik_bebny <= 16
+        sample :bd_haus, amp: 2
+        sleep 1
+    elsif licznik_bebny > 16 and licznik_bebny <= 32
+        sample :sn_dub, amp: 1.0 + (licznik_bebny * 0.03)
+        sleep 0.5
+        sample :sn_dub, amp: 1.0 + (licznik_bebny * 0.03)
+        sleep 0.5
+    else
+        sample :bd_haus, amp: 3
+        if licznik_bebny % 2 == 0
+            sample :sn_clap, amp: 2
+        end
+        sleep 1
+    end
 end
