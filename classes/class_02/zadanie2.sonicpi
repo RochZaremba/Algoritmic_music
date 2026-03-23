@@ -1,5 +1,5 @@
 # Zajecia 2.2
-# Prezentacja wybranych interwalow w czterech sposobach:
+# Prezentacja interwalow od prymy do oktawy w czterech sposobach:
 # - rownoczesnie
 # - naprzemiennie wolno
 # - naprzemiennie szybko
@@ -9,14 +9,30 @@ use_bpm 60
 use_synth :piano
 
 intervals = [
-  [:c4, :cs4], # sekunda mala
-  [:c4, :fs4], # tryton
-  [:c4, :g4]   # kwinta czysta
+  ["pryma", 0],
+  ["sekunda mala", 1],
+  ["sekunda wielka", 2],
+  ["tercja mala", 3],
+  ["tercja wielka", 4],
+  ["kwarta czysta", 5],
+  ["tryton", 6],
+  ["kwinta czysta", 7],
+  ["seksta mala", 8],
+  ["seksta wielka", 9],
+  ["septyma mala", 10],
+  ["septyma wielka", 11],
+  ["oktawa", 12]
 ]
 
 tempo_curve = (ring 0.75, 0.6, 0.45, 0.3, 0.2, 0.3, 0.45, 0.6, 0.75)
+base_note = note(:c4)
 
-intervals.each do |first, second|
+intervals.each do |name, semitones|
+  first = base_note
+  second = base_note + semitones
+
+  puts name
+
   play first, sustain: 1.2, release: 0.3, amp: 1.2
   play second, sustain: 1.2, release: 0.3, amp: 1.2
   sleep 2
@@ -44,3 +60,20 @@ intervals.each do |first, second|
 
   sleep 1
 end
+
+# Tabelka do zadania 2:
+# | Interwal | Opinia jak brzmia rownoczesnie | Opinia jak brzmia po sobie |
+# | --- | --- | --- |
+# | Pryma | Brzmi stabilnie, nieruchomo i bardzo zgodnie. | Brzmi jak powtorzenie tego samego dzwieku, bez napiecia. |
+# | Sekunda mala | Brzmi ciasno, ostro i mocno napieciowo. | Brzmi jak tarcie albo krok tuz obok, niepokojaco. |
+# | Sekunda wielka | Brzmi nadal napieciowo, ale mniej agresywnie niz sekunda mala. | Brzmi jak prosty ruch melodii, lekko otwarty i naturalny. |
+# | Tercja mala | Brzmi smutno, cieplo i troche mrocznie. | Brzmi melancholijnie, kojarzy sie z muzyka minorowa. |
+# | Tercja wielka | Brzmi jasno, pogodnie i bardzo harmonijnie. | Brzmi wesolo i znajomo, jak poczatek durowej melodii. |
+# | Kwarta czysta | Brzmi stabilnie, ale z lekkim zawieszeniem. | Brzmi jak otwarcie albo wezwanie, dosc podniole. |
+# | Tryton | Brzmi ostro, niestabilnie i bardzo nerwowo. | Brzmi dziwnie, niepokojaco i od razu buduje napiecie. |
+# | Kwinta czysta | Brzmi mocno, czysto i bardzo stabilnie. | Brzmi szeroko i pewnie, kojarzy sie z fanfara albo otwartym akordem. |
+# | Seksta mala | Brzmi ciemniej niz seksta wielka, ale nadal dosc miekko. | Brzmi nostalgicznie i troche filmowo. |
+# | Seksta wielka | Brzmi szeroko, lagodnie i dosc jasno. | Brzmi melodyjnie i spokojnie, bez ostrego napiecia. |
+# | Septyma mala | Brzmi bluesowo, lekko brudno i z napieciem. | Brzmi jak zawieszenie przed rozwiazaniem. |
+# | Septyma wielka | Brzmi bardzo napieciowo, ostro i niestabilnie. | Brzmi jak mocne oczekiwanie na zakonczenie w gorze. |
+# | Oktawa | Brzmi pelnie, zgodnie i bardzo stabilnie. | Brzmi jak ten sam dzwiek w innym rejestrze, szeroko i naturalnie. |
