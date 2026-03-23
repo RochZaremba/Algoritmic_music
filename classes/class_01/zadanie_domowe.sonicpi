@@ -33,16 +33,17 @@ live_loop :lead do
     use_synth :supersaw
 
     if licznik_lead <= 16
+        play :c4, amp: 0.5 + (licznik_lead * 0.05), release: 0.2, cutoff: 60 + (licznik_lead * 2)
         sleep 2
     elsif licznik_lead <= 32
-        play :c5, amp: 0.8, release: 0.2
+        play :c5, amp: 1.5, release: 0.2
         sleep 0.25
-        play :c6, amp: 0.6, release: 0.1
+        play :c6, amp: 1.0, release: 0.1
         sleep 0.25
-        play :c4, release: 0.5
+        play :c4, amp: 1.5, release: 0.5
         sleep 1.5
     else
-        play :c4, amp: 0.5, release: 2.0
+        play :c4, amp: 0.5, release: 2.0, cutoff: 70
         sleep 2
     end
 end
