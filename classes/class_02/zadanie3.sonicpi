@@ -1,0 +1,24 @@
+# Zajecia 2.3
+# Rytm oparty o ciag Fibonacciego (OEIS A000045).
+
+use_bpm 110
+use_synth :blade
+
+fib = (ring 1, 1, 2, 3, 5, 8, 13, 21)
+durations = fib.map { |n| ((n % 5) + 1) * 0.125 }
+notes = (ring :e4, :g4, :b4, :d5, :b4, :g4, :e4, :d4)
+
+16.times do
+  i = tick
+  duration = durations[i % durations.length]
+
+  play notes[i % notes.length],
+    attack: 0.01,
+    sustain: duration * 0.5,
+    release: duration * 0.5,
+    cutoff: 80 + (i % 4) * 10,
+    amp: 0.8
+
+  sample :elec_tick, amp: 0.4 if i.even?
+  sleep duration
+end
