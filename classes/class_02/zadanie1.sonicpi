@@ -1,0 +1,31 @@
+# Zajecia 2.1
+# Pokaz zmian barwy syntezatora :hollow po zmianie wybranych parametrow.
+
+use_bpm 70
+
+notes = chord(:e3, :m7)
+
+with_synth :hollow do
+  play_chord notes,
+    attack: 0.1, sustain: 1.2, release: 0.4,
+    cutoff: 70, amp: 0.8
+  sleep 2
+
+  play_chord notes,
+    attack: 0.8, sustain: 1.0, release: 2.5,
+    cutoff: 90, amp: 0.8
+  sleep 3
+
+  play_chord notes,
+    attack: 0.1, sustain: 1.5, release: 1.2,
+    cutoff: 110, vibrato_rate: 6, vibrato_depth: 0.3,
+    amp: 0.9
+  sleep 2.5
+
+  with_fx :reverb, room: 0.8, mix: 0.4 do
+    play_chord notes,
+      attack: 0.3, sustain: 2.0, release: 3.0,
+      cutoff: 120, amp: 0.7
+  end
+  sleep 4
+end
