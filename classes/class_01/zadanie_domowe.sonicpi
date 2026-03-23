@@ -1,30 +1,56 @@
-use_bpm 125 
+use_bpm 128
+licznik_bas = 0
+licznik_lead = 0
+licznik_drums = 0
 
-live_loop :gruby_bas do
-    use_synth :tb303
-	play :c2, amp: 1.5, release: 0.2
-	sleep 0.5
-	play :c3, amp: 0.8, release: 0.1
-	sleep 0.5
-	play :c1, amp: 1.5, release: 0.2
-	sleep 0.75
-    play :c2, amp: 1.2, release: 0.2
-    sleep 0.25
+live_loop :bas do
+    if licznik_bas == 34 then stop end
+    licznik_bas += 1
+
+    if licznik_bas <= 16
+        sleep 2
+    elsif licznik_bas <= 32
+        use_synth :tb303
+        play :c2, amp: 2.0, release: 0.3
+        sleep 0.5
+        play :c3, amp: 1.5, release: 0.2
+        sleep 0.5
+        play :c1, amp: 2.5, release: 0.4
+        sleep 0.75
+        play :c2, amp: 2.0, release: 0.2
+        sleep 0.25
+    else
+        use_synth :tb303
+        play :c1, amp: 1.5, release: 2.0
+        sleep 2
+    end
 end
 
 live_loop :lead do
-    use_synth :supersaw
-    sleep 2 
-    play :c5, amp: 0.8, release: 0.2
-    sleep 0.25
-    play :c6, amp: 0.6, release:0.1
-    sleep 0.25
-    play :c4,release:0.5
-    sleep 1.5 
+    if licznik_lead == 34 then stop end
+    licznik_lead += 1
 
+    use_synth :supersaw
+
+    if licznik_lead <= 16
+        sleep 2
+    elsif licznik_lead <= 32
+        play :c5, amp: 0.8, release: 0.2
+        sleep 0.25
+        play :c6, amp: 0.6, release: 0.1
+        sleep 0.25
+        play :c4, release: 0.5
+        sleep 1.5
+    else
+        play :c4, amp: 0.5, release: 2.0
+        sleep 2
+    end
 end
 
 live_loop :drums do
+    if licznik_drums == 34 then stop end
+    licznik_drums += 1
+
     sample :bd_haus
     sleep 1
     sample :bd_haus
