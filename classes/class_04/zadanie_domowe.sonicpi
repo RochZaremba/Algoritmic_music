@@ -1,0 +1,52 @@
+use_bpm 100
+use_random_seed 4004
+
+bars = 0
+motyw = (ring :e4, :fs4, :b4, :fs4, :e4, :d4, :fs4, :e4)
+bas = (ring :e2, :e2, :e2, :e2, :d2, :d2, :a1, :b1)
+
+live_loop :clock do
+  cue :bar
+  bars += 1
+  sleep 4
+  stop if bars == 16
+end
+
+live_loop :bass do
+  sync :bar
+
+  with_synth :fm do
+    4.times do
+      play bas.tick(:bass),
+        attack: 0.02,
+        sustain: 0.4,
+        release: 0.4,
+        divisor: 2,
+        depth: 1.2,
+        amp: 0.45 + rand(0.1)
+      sleep 1
+    end
+  end
+
+  stop if bars >= 16
+end
+
+live_loop :motif do
+  sync :bar
+
+  with_synth :pluck do
+    8.times do
+      przesuniecie = (ring 0, 0, 0, 12).choose
+
+      play motyw.tick(:motyw) + przesuniecie,
+        attack: 0.01,
+        sustain: 0.15,
+        release: 0.25,
+        cutoff: 85 + rrand_i(-5, 5),
+        amp: 0.35
+      sleep 0.5
+    end
+  end
+
+  stop if bars >= 16
+end
