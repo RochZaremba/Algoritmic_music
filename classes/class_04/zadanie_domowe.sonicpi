@@ -2,14 +2,32 @@ use_bpm 100
 use_random_seed 4004
 
 bars = 0
-motyw = (ring :e4, :fs4, :b4, :fs4, :e4, :d4, :fs4, :e4)
-bas = (ring :e2, :e2, :e2, :e2, :d2, :d2, :a1, :b1)
+bass_notes = (ring :e2, :e2, :d2, :d2, :a1, :a1, :b1, :b1)
+phrases = [
+  (ring :e4, :fs4, :b4, :fs4),
+  (ring :e4, :d4, :fs4, :e4),
+  (ring :fs4, :e4, :d4, :e4),
+  (ring :e4, :fs4, :e4, :b4)
+]
 
 live_loop :clock do
   cue :bar
   bars += 1
   sleep 4
-  stop if bars == 16
+  stop if bars == 25
+end
+
+live_loop :pulse do
+  sync :bar
+
+  with_synth :beep do
+    8.times do
+      play :c6, release: 0.1, amp: 0.18
+      sleep 0.5
+    end
+  end
+
+  stop if bars >= 25
 end
 
 live_loop :bass do
@@ -17,36 +35,58 @@ live_loop :bass do
 
   with_synth :fm do
     4.times do
-      play bas.tick(:bass),
+      play bass_notes.tick(:bass),
         attack: 0.02,
-        sustain: 0.4,
-        release: 0.4,
+        sustain: 0.35,
+        release: 0.35,
         divisor: 2,
-        depth: 1.2,
-        amp: 0.45 + rand(0.1)
+        depth: 1.1,
+        amp: 0.35 + rand(0.05)
       sleep 1
     end
   end
 
-  stop if bars >= 16
+  stop if bars >= 25
 end
 
-live_loop :motif do
+live_loop :motif_a do
   sync :bar
+  phrase = phrases.choose
+  repeats = 2 + rand_i(2)
 
   with_synth :pluck do
-    8.times do
-      przesuniecie = (ring 0, 0, 0, 12).choose
+    repeats.times do
+      phrase.each do |note_value|
+        play note_value,
+          attack: 0.01,
+          sustain: 0.12,
+          release: 0.22,
+          cutoff: 82 + rrand_i(-4, 4),
+          amp: 0.32
+        sleep 0.5
+      end
+    end
+  end
 
-      play motyw.tick(:motyw) + przesuniecie,
+  stop if bars >= 25
+end
+
+live_loop :motif_b do
+  sync :bar
+  sleep 1
+  phrase = phrases.tick(:phrase_b)
+  octave_shift = (ring 0, 0, 12, 0).choose
+
+  with_synth :sine do
+    phrase.each do |note_value|
+      play note_value + octave_shift,
         attack: 0.01,
         sustain: 0.15,
-        release: 0.25,
-        cutoff: 85 + rrand_i(-5, 5),
-        amp: 0.35
+        release: 0.3,
+        amp: 0.2
       sleep 0.5
     end
   end
 
-  stop if bars >= 16
+  stop if bars >= 25
 end
